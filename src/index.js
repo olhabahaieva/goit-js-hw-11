@@ -3,6 +3,9 @@ import axios from 'axios';
 //form element
 const form = document.getElementById('search-form');
 
+//Input Eelement
+const input = document.querySelector('.search-form input[name=searchQuery]');
+
 //Where to add founded images
 const gallery = document.querySelector('.gallery');
 
@@ -27,7 +30,7 @@ async function getImages(images) {
   const API_KEY = '35890843-7500688730c28920b4cfb1288';
   const axios = require('axios').default;
   const searchTerm = images[0];
-  const response = await axios;
+  const response = axios;
   try {
     const response = await axios.get(
       `${BASE_URL}?key=${API_KEY}&q=${searchTerm}&image_type=photo&orientation=horizontal&safesearch=true`
