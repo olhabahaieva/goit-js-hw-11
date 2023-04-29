@@ -27,9 +27,11 @@ async function getImages(images) {
   const API_KEY = '35890843-7500688730c28920b4cfb1288';
   const axios = require('axios').default;
   const searchTerm = images[0];
-  const response = await axios
+  const response = await axios;
   try {
-    const response = await axios.get(`${BASE_URL}?key=${API_KEY}&q=${searchTerm}`);
+    const response = await axios.get(
+      `${BASE_URL}?key=${API_KEY}&q=${searchTerm}&image_type=photo&orientation=horizontal&safesearch=true`
+    );
     console.log(response);
   } catch (error) {
     console.error(error);
