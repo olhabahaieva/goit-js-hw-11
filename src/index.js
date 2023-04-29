@@ -16,8 +16,7 @@ form.addEventListener('submit', formOnSubmit);
 
 function formOnSubmit(evt) {
   evt.preventDefault();
-  const formData = new FormData(evt.target);
-  const images = formData.getAll('image');
+  const images = input.value;
   getImages(images)
     .then(data => (gallery.innerHTML = createMarkup(data)))
     .catch(err => console.log(err))
