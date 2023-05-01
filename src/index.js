@@ -19,9 +19,13 @@ function formOnSubmit(evt) {
   evt.preventDefault();
   const formData = new FormData(evt.currentTarget);
   const images = formData.get('searchQuery');
+  if(images === ''){
+    gallery.innerHTML = '';
+    return;
+  }
   getImages(images)
     .then(data => (gallery.innerHTML = createMarkup(data)))
-    .catch(Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.'))
+    .catch(err => Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.'))
     .finally(() => evt.target.reset());
 }
 
@@ -35,6 +39,9 @@ async function getImages(images, page) {
       `${BASE_URL}?key=${API_KEY}&q=${images}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`
     );
     console.log(response);
+    if(response.data.hits.length === 0){
+      throw new Error(Notiflix.Notify.failure("We're sorry, but you've reached the end of search results."));
+    }
     const data = await Promise.allSettled(response.data.hits);
     const result = data
     .filter(({ status }) => status === 'fulfilled')
@@ -43,7 +50,7 @@ async function getImages(images, page) {
     console.log(result);
     return result;
   } catch (error) {
-    console.error(error);
+    console.log(error);
   }
 }
 
