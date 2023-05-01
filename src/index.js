@@ -29,21 +29,21 @@ async function getImages(images) {
   const BASE_URL = 'https://pixabay.com/api/';
   const API_KEY = '35890843-7500688730c28920b4cfb1288';
   const axios = require('axios').default;
-  // const response = axios;
   try {
     const response = await axios.get(
       `${BASE_URL}?key=${API_KEY}&q=${images}&image_type=photo&orientation=horizontal&safesearch=true`
     );
     console.log(response);
+    const data = await Promise.allSettled(response.data.hits);
+    const result = data
+    .filter(({ status }) => status === 'fulfilled')
+    .map(({ value }) => value);
+
+    console.log(result);
+    return result;
   } catch (error) {
     console.error(error);
   }
-
-  const data = await Promise.allSettled(responses);
-  const result = data.filter(({ status }) => status === 'fulfilled');
-
-  console.log(result);
-  return result;
 }
 
 function createMarkup(arr) {
