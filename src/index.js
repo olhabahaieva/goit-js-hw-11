@@ -13,6 +13,9 @@ const gallery = document.querySelector('.gallery');
 //event listener
 form.addEventListener('submit', formOnSubmit);
 
+//Load more button
+const loadMoreButton = document.querySelector('.load-more');
+
 //Main function
 
 function formOnSubmit(evt) {
@@ -24,7 +27,10 @@ function formOnSubmit(evt) {
     return;
   }
   getImages(images)
-    .then(data => (gallery.innerHTML = createMarkup(data)))
+    .then(data => {
+      (gallery.innerHTML = createMarkup(data));
+      loadMoreButton.hidden = false;
+    })
     .catch(err => Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.'))
     .finally(() => evt.target.reset());
 }
