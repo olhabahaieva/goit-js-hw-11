@@ -16,7 +16,8 @@ form.addEventListener('submit', formOnSubmit);
 
 function formOnSubmit(evt) {
   evt.preventDefault();
-  const images = input.value;
+  const formData = new FormData(evt.currentTarget);
+  const images = formData.get('searchQuery');
   getImages(images)
     .then(data => (gallery.innerHTML = createMarkup(data)))
     .catch(err => console.log(err))
@@ -28,7 +29,7 @@ async function getImages(images) {
   const BASE_URL = 'https://pixabay.com/api/';
   const API_KEY = '35890843-7500688730c28920b4cfb1288';
   const axios = require('axios').default;
-  const response = axios;
+  // const response = axios;
   try {
     const response = await axios.get(
       `${BASE_URL}?key=${API_KEY}&q=${images}&image_type=photo&orientation=horizontal&safesearch=true`
@@ -37,11 +38,16 @@ async function getImages(images) {
   } catch (error) {
     console.error(error);
   }
-  return response;
+
+  const data = await Promise.allSettled(responses);
+  const result = data.filter(({ status }) => status === 'fulfilled');
+
+  console.log(result);
+  return result;
 }
 
-function createMarkup(response) {
-  return response
+function createMarkup(arr) {
+  return arr
     .map(
       ({
         webformatURL,
