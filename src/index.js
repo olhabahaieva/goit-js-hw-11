@@ -73,6 +73,9 @@ async function getImages(images, page = 1) {
     const response = await axios.get(
       `${BASE_URL}?key=${API_KEY}&q=${images}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`
     );
+    if (images <= 40){
+      loadMoreButton.hidden = true;
+    }
     console.log(response);
     if (response.data.hits.length === 0) {
       throw new Error(
