@@ -21,7 +21,6 @@ const loadMoreButton = document.querySelector('.load-more');
 function formOnSubmit(evt) {
   evt.preventDefault();
   const formData = new FormData(evt.currentTarget);
-  loadMoreButton.classList.add('load-more');
   const images = formData.get('searchQuery');
   if(images === ''){
     gallery.innerHTML = '';
@@ -30,7 +29,7 @@ function formOnSubmit(evt) {
   getImages(images)
     .then(data => {
       (gallery.innerHTML = createMarkup(data));
-      loadMoreButton.classList.remove('load-more');
+      loadMoreButton.hidden = false;
     })
     .catch(err => Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.'))
     .finally(() => evt.target.reset());
