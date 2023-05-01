@@ -21,6 +21,7 @@ const loadMoreButton = document.querySelector('.load-more');
 function formOnSubmit(evt) {
   evt.preventDefault();
   const formData = new FormData(evt.currentTarget);
+  loadMoreButton.classList.add('load-more');
   const images = formData.get('searchQuery');
   if(images === ''){
     gallery.innerHTML = '';
@@ -29,14 +30,14 @@ function formOnSubmit(evt) {
   getImages(images)
     .then(data => {
       (gallery.innerHTML = createMarkup(data));
-      loadMoreButton.hidden = false;
+      loadMoreButton.classList.remove('load-more');
     })
     .catch(err => Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.'))
     .finally(() => evt.target.reset());
 }
 
 //Function to get images
-async function getImages(images, page) {
+async function getImages(images, page = 1) {
   const BASE_URL = 'https://pixabay.com/api/';
   const API_KEY = '35890843-7500688730c28920b4cfb1288';
   const axios = require('axios').default;
