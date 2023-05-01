@@ -25,11 +25,12 @@ function onPagination() {
   getImages(currentPage)
     .then(data => {
       gallery.insertAdjacentHTML('beforeend', createMarkup(data));
-      if(data.page === {totalHits}){
+      const totalPages = Math.ceil(data.totalHits / 40);
+      if(currentPage === totalPages){
         loadMoreButton.hidden = true;
         Notiflix.Notify.info(
           "We're sorry, but you've reached the end of search results."
-        )
+        );
         return;
       }
       loadMoreButton.hidden = false;
