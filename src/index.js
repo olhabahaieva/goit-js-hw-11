@@ -21,7 +21,7 @@ function formOnSubmit(evt) {
   const images = formData.get('searchQuery');
   getImages(images)
     .then(data => (gallery.innerHTML = createMarkup(data)))
-    .catch(err => console.log(err))
+    .catch(Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.'))
     .finally(() => evt.target.reset());
 }
 
