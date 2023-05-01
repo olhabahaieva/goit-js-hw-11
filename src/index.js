@@ -24,7 +24,7 @@ function onPagination() {
   currentPage += 1;
   getImages(currentPage)
     .then(data => {
-      gallery.innerHTML = createMarkup(data);
+      gallery.insertAdjacentHTML('beforeend', createMarkup(data));
       loadMoreButton.hidden = false;
     })
     .catch(err =>
@@ -47,7 +47,7 @@ function formOnSubmit(evt) {
   }
   getImages(images)
     .then(data => {
-      gallery.innerHTML = createMarkup(data);
+      gallery.insertAdjacentHTML('beforeend', createMarkup(data));
       loadMoreButton.hidden = false;
     })
     .catch(err =>
