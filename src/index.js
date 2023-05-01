@@ -26,13 +26,13 @@ function formOnSubmit(evt) {
 }
 
 //Function to get images
-async function getImages(images) {
+async function getImages(images, page) {
   const BASE_URL = 'https://pixabay.com/api/';
   const API_KEY = '35890843-7500688730c28920b4cfb1288';
   const axios = require('axios').default;
   try {
     const response = await axios.get(
-      `${BASE_URL}?key=${API_KEY}&q=${images}&image_type=photo&orientation=horizontal&safesearch=true`
+      `${BASE_URL}?key=${API_KEY}&q=${images}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`
     );
     console.log(response);
     const data = await Promise.allSettled(response.data.hits);
