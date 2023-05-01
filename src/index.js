@@ -4,9 +4,6 @@ import Notiflix from 'notiflix';
 //form element
 const form = document.getElementById('search-form');
 
-//Input Eelement
-const input = document.querySelector('.search-form input[name=searchQuery]');
-
 //Where to add founded images
 const gallery = document.querySelector('.gallery');
 
