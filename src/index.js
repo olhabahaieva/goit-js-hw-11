@@ -7,11 +7,33 @@ const form = document.getElementById('search-form');
 //Where to add founded images
 const gallery = document.querySelector('.gallery');
 
-//event listener
+//Form event listener
 form.addEventListener('submit', formOnSubmit);
+
+//Page var
+let currentPage = 1;
 
 //Load more button
 const loadMoreButton = document.querySelector('.load-more');
+
+//Button Event listener
+loadMoreButton.addEventListener('click', onPagination);
+
+//Function for the button
+function onPagination() {
+  currentPage += 1;
+  getImages(currentPage)
+    .then(data => {
+      gallery.innerHTML = createMarkup(data);
+      loadMoreButton.hidden = false;
+    })
+    .catch(err =>
+      Notiflix.Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.'
+      )
+    )
+    .finally(() => evt.target.reset());
+}
 
 //Main function
 
@@ -19,16 +41,20 @@ function formOnSubmit(evt) {
   evt.preventDefault();
   const formData = new FormData(evt.currentTarget);
   const images = formData.get('searchQuery');
-  if(images === ''){
+  if (images === '') {
     gallery.innerHTML = '';
     return;
   }
   getImages(images)
     .then(data => {
-      (gallery.innerHTML = createMarkup(data));
+      gallery.innerHTML = createMarkup(data);
       loadMoreButton.hidden = false;
     })
-    .catch(err => Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.'))
+    .catch(err =>
+      Notiflix.Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.'
+      )
+    )
     .finally(() => evt.target.reset());
 }
 
@@ -42,13 +68,17 @@ async function getImages(images, page = 1) {
       `${BASE_URL}?key=${API_KEY}&q=${images}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`
     );
     console.log(response);
-    if(response.data.hits.length === 0){
-      throw new Error(Notiflix.Notify.failure("We're sorry, but you've reached the end of search results."));
+    if (response.data.hits.length === 0) {
+      throw new Error(
+        Notiflix.Notify.failure(
+          "We're sorry, but you've reached the end of search results."
+        )
+      );
     }
     const data = await Promise.allSettled(response.data.hits);
     const result = data
-    .filter(({ status }) => status === 'fulfilled')
-    .map(({ value }) => value);
+      .filter(({ status }) => status === 'fulfilled')
+      .map(({ value }) => value);
 
     console.log(result);
     return result;
