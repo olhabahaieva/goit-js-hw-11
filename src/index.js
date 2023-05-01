@@ -25,6 +25,13 @@ function onPagination() {
   getImages(currentPage)
     .then(data => {
       gallery.insertAdjacentHTML('beforeend', createMarkup(data));
+      if(data.page === {totalHits}){
+        loadMoreButton.hidden = true;
+        Notiflix.Notify.info(
+          "We're sorry, but you've reached the end of search results."
+        )
+        return;
+      }
       loadMoreButton.hidden = false;
     })
     .catch(err =>
@@ -32,7 +39,6 @@ function onPagination() {
         'Sorry, there are no images matching your search query. Please try again.'
       )
     )
-    .finally(() => evt.target.reset());
 }
 
 //Main function
