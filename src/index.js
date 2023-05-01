@@ -25,8 +25,7 @@ function onPagination() {
   getImages(currentPage)
     .then(data => {
       gallery.insertAdjacentHTML('beforeend', createMarkup(data));
-      const totalPages = Math.ceil(data.totalHits / 40);
-      if(currentPage === totalPages){
+      if(totalHits <= 40){
         loadMoreButton.hidden = true;
         Notiflix.Notify.info(
           "We're sorry, but you've reached the end of search results."
@@ -54,7 +53,7 @@ function formOnSubmit(evt) {
   }
   getImages(images)
     .then(data => {
-      gallery.insertAdjacentHTML('beforeend', createMarkup(data));
+      gallery.innerHTML = createMarkup(data)
       loadMoreButton.hidden = false;
     })
     .catch(err =>
