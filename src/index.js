@@ -44,7 +44,6 @@ async function formOnSubmit(evt) {
   searchQuery = formData.get('searchQuery');
   if (searchQuery === '') {
     gallery.innerHTML = '';
-    return;
   }
 
   try {
@@ -52,7 +51,7 @@ async function formOnSubmit(evt) {
     gallery.innerHTML = createMarkup(hits);
       
       if (totalHits <= 0) {
-        Notiflix.Notify.info('No results found.');
+        Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
         loadMoreButton.hidden = true;
       } else {
         loadMoreButton.hidden = false;
