@@ -25,13 +25,7 @@ async function getImages(images, page = 1) {
           )
         );
       }
-      const data = await Promise.allSettled(response.data.hits);
-      const result = data
-        .filter(({ status }) => status === 'fulfilled')
-        .map(({ value }) => value);
-  
-      console.log(result);
-      return result;
+      return response.data.hits
     } catch (error) {
       console.log(error);
     }
