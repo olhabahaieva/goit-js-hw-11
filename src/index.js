@@ -13,7 +13,6 @@ form.addEventListener('submit', formOnSubmit);
 
 //Page var
 let currentPage = 1;
-let totalHits = 0;
 let searchQuery = '';
 
 //Load more button
