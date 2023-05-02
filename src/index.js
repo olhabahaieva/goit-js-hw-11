@@ -26,6 +26,11 @@ function onPagination(totalHits) {
   getImages(searchQuery, currentPage)
     .then(data => {
       gallery.insertAdjacentHTML('beforeend', createMarkup(data));
+      if (totalHits === 0) {
+        loadMoreButton.hidden = true;
+        Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+        return;
+      }
       if (currentPage * 40 >= totalHits) {
         loadMoreButton.hidden = true;
         Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
