@@ -25,20 +25,14 @@ loadMoreButton.addEventListener('click', onPagination);
 //Function for the button
 function onPagination() {
   currentPage += 1;
-  const remainingHits = totalHits - currentPage * 40;
-  if (remainingHits <= 0) {
-    loadMoreButton.hidden = true;
-    if (totalHits > 0) {
-      Notiflix.Notify.info(
-        "We're sorry, but you've reached the end of search results."
-      );
-    }
-    return;
-  }
+ 
   getImages(searchQuery, currentPage)
     .then((data) => {
       gallery.insertAdjacentHTML('beforeend', createMarkup(data));
-      loadMoreButton.hidden = false;
+      if(gallery.children.length >= totalHits){
+        Notiflix.Notify.info("We're sorry, but you've reached the end of search results")
+        loadMoreButton.hidden = true;
+      };
     })
     .catch((err) => console.log(err));
 }
