@@ -1,7 +1,5 @@
 import axios from 'axios';
 import Notiflix from 'notiflix';
-//Load more button
-const loadMoreButton = document.querySelector('.load-more');
 
 //Function to get images
 async function getImages(images, page = 1) {
@@ -12,7 +10,6 @@ async function getImages(images, page = 1) {
         `${BASE_URL}?key=${API_KEY}&q=${images}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`
       );
       if (images <= 40){
-        loadMoreButton.hidden = true;
         Notiflix.Notify.info(
           "We're sorry, but you've reached the end of search results."
         )
