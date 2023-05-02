@@ -1,5 +1,4 @@
 import axios from 'axios';
-import Notiflix from 'notiflix';
 
 //Function to get images
 async function getImages(images, page = 1) {
