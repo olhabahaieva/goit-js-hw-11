@@ -1,4 +1,3 @@
-import Notiflix from 'notiflix';
 import { getImages } from './js/getImages';
 import { createMarkup } from './js/createMarkup';
 
