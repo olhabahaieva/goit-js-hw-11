@@ -24,9 +24,9 @@ loadMoreButton.addEventListener('click', onPagination);
 function onPagination(totalHits) {
   currentPage += 1;
   getImages(searchQuery, currentPage)
-    .then( data => {
+    .then(data => {
       gallery.insertAdjacentHTML('beforeend', createMarkup(data));
-      if(currentPage * 40 >= totalHits){
+      if (currentPage * 40 >= totalHits) {
         loadMoreButton.hidden = true;
         return;
       }
@@ -35,17 +35,19 @@ function onPagination(totalHits) {
     .catch(err => console.log(err))
 }
 
+
 //Main function
 
 function formOnSubmit(evt) {
   evt.preventDefault();
   const formData = new FormData(evt.currentTarget);
-  const images = formData.get('searchQuery');
-  if (images === '') {
+  searchQuery = formData.get('searchQuery');
+  if (searchQuery === '') {
     gallery.innerHTML = '';
     return;
   }
-  getImages(images)
+  currentPage = 1; 
+  getImages(searchQuery)
     .then(data => {
       gallery.innerHTML = createMarkup(data)
       loadMoreButton.hidden = false;
@@ -53,3 +55,4 @@ function formOnSubmit(evt) {
     .catch(err => console.log(err))
     .finally(() => evt.target.reset());
 }
+
