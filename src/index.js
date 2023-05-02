@@ -1,5 +1,6 @@
 import { getImages } from './js/getImages';
 import { createMarkup } from './js/createMarkup';
+import Notiflix from 'notiflix';
 
 //form element
 const form = document.getElementById('search-form');
@@ -12,6 +13,7 @@ form.addEventListener('submit', formOnSubmit);
 
 //Page var
 let currentPage = 1;
+let totalHits = 0;
 let searchQuery = '';
 
 //Load more button
@@ -21,29 +23,27 @@ const loadMoreButton = document.querySelector('.load-more');
 loadMoreButton.addEventListener('click', onPagination);
 
 //Function for the button
-function onPagination(totalHits) {
+function onPagination() {
   currentPage += 1;
+  const remainingHits = totalHits - currentPage * 40;
+  if (remainingHits <= 0) {
+    loadMoreButton.hidden = true;
+    if (totalHits > 0) {
+      Notiflix.Notify.info(
+        "We're sorry, but you've reached the end of search results."
+      );
+    }
+    return;
+  }
   getImages(searchQuery, currentPage)
-    .then(data => {
+    .then((data) => {
       gallery.insertAdjacentHTML('beforeend', createMarkup(data));
-      if (totalHits === 0) {
-        loadMoreButton.hidden = true;
-        Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
-        return;
-      }
-      if (currentPage * 40 >= totalHits) {
-        loadMoreButton.hidden = true;
-        Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
-        return;
-      }
       loadMoreButton.hidden = false;
     })
-    .catch(err => console.log(err))
+    .catch((err) => console.log(err));
 }
 
-
 //Main function
-
 function formOnSubmit(evt) {
   evt.preventDefault();
   const formData = new FormData(evt.currentTarget);
@@ -52,13 +52,17 @@ function formOnSubmit(evt) {
     gallery.innerHTML = '';
     return;
   }
-  currentPage = 1; 
   getImages(searchQuery)
-    .then(data => {
-      gallery.innerHTML = createMarkup(data)
-      loadMoreButton.hidden = false;
+    .then((data) => {
+      gallery.innerHTML = createMarkup(data);
+      totalHits = data.totalHits;
+      if (totalHits <= 0) {
+        Notiflix.Notify.info('No results found.');
+        loadMoreButton.hidden = true;
+      } else {
+        loadMoreButton.hidden = false;
+      }
     })
-    .catch(err => console.log(err))
+    .catch((err) => console.log(err))
     .finally(() => evt.target.reset());
 }
-
