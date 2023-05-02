@@ -38,7 +38,7 @@ async function onPagination() {
 }
 
 //Main function
-function formOnSubmit(evt) {
+async function formOnSubmit(evt) {
   evt.preventDefault();
   const formData = new FormData(evt.currentTarget);
   searchQuery = formData.get('searchQuery');
@@ -46,9 +46,10 @@ function formOnSubmit(evt) {
     gallery.innerHTML = '';
     return;
   }
-  getImages(searchQuery)
-    .then(({hits, totalHits}) => {
-      gallery.innerHTML = createMarkup(hits);
+
+  try {
+    const {hits, totalHits} = await getImages(searchQuery);
+    gallery.innerHTML = createMarkup(hits);
       
       if (totalHits <= 0) {
         Notiflix.Notify.info('No results found.');
@@ -56,7 +57,10 @@ function formOnSubmit(evt) {
       } else {
         loadMoreButton.hidden = false;
       }
-    })
-    .catch((err) => console.log(err))
-    .finally(() => evt.target.reset());
+  } catch (error) {
+    console.log(err)
+  } finally {
+    evt.target.reset()
+  };
+ 
 }
