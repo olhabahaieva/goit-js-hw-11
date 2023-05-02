@@ -28,6 +28,7 @@ function onPagination(totalHits) {
       gallery.insertAdjacentHTML('beforeend', createMarkup(data));
       if (currentPage * 40 >= totalHits) {
         loadMoreButton.hidden = true;
+        Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
         return;
       }
       loadMoreButton.hidden = false;
