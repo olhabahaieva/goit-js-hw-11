@@ -45,6 +45,7 @@ async function formOnSubmit(evt) {
   if (searchQuery === '') {
     gallery.innerHTML = '';
   }
+  currentPage = 1;
 
   try {
     const {hits, totalHits} = await getImages(searchQuery);
@@ -60,7 +61,7 @@ async function formOnSubmit(evt) {
   } catch (error) {
     console.log(err)
   } finally {
-    evt.target.reset()
+    evt.currentTarget.reset()
   };
- 
+  reset();
 }
