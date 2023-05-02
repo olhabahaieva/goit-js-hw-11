@@ -53,9 +53,10 @@ async function formOnSubmit(evt) {
       if (totalHits <= 0) {
         Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
         loadMoreButton.hidden = true;
-      } else {
-        loadMoreButton.hidden = false;
-      }
+      } else if(totalHits < 40){
+        loadMoreButton.hidden = true;
+      } else 
+      loadMoreButton.hidden = false;
   } catch (error) {
     console.log(err)
   } finally {
