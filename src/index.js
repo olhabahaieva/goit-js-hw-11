@@ -12,6 +12,7 @@ form.addEventListener('submit', formOnSubmit);
 
 //Page var
 let currentPage = 1;
+let searchQuery = '';
 
 //Load more button
 const loadMoreButton = document.querySelector('.load-more');
@@ -22,7 +23,7 @@ loadMoreButton.addEventListener('click', onPagination);
 //Function for the button
 function onPagination(totalHits) {
   currentPage += 1;
-  getImages(currentPage)
+  getImages(searchQuery, currentPage)
     .then( data => {
       gallery.insertAdjacentHTML('beforeend', createMarkup(data));
       if(currentPage * 40 >= totalHits){
