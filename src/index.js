@@ -1,5 +1,6 @@
-import axios from 'axios';
 import Notiflix from 'notiflix';
+import { getImages } from './js/getImages';
+import { createMarkup } from './js/createMarkup';
 
 //form element
 const form = document.getElementById('search-form');
@@ -20,12 +21,12 @@ const loadMoreButton = document.querySelector('.load-more');
 loadMoreButton.addEventListener('click', onPagination);
 
 //Function for the button
-function onPagination() {
+function onPagination(totalHits) {
   currentPage += 1;
   getImages(currentPage)
-    .then(data => {
+    .then( data => {
       gallery.insertAdjacentHTML('beforeend', createMarkup(data));
-      if(totalHits <= 40){
+      if(currentPage * 40 >= totalHits){
         loadMoreButton.hidden = true;
         return;
       }
@@ -51,73 +52,4 @@ function formOnSubmit(evt) {
     })
     .catch(err => console.log(err))
     .finally(() => evt.target.reset());
-}
-
-//Function to get images
-async function getImages(images, page = 1) {
-  const BASE_URL = 'https://pixabay.com/api/';
-  const API_KEY = '35890843-7500688730c28920b4cfb1288';
-  const axios = require('axios').default;
-  try {
-    const response = await axios.get(
-      `${BASE_URL}?key=${API_KEY}&q=${images}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`
-    );
-    if (images <= 40){
-      loadMoreButton.hidden = true;
-      Notiflix.Notify.info(
-        "We're sorry, but you've reached the end of search results."
-      )
-    }
-    console.log(response);
-    if (response.data.hits.length === 0) {
-      throw new Error(
-        Notiflix.Notify.failure(
-          "Sorry, there are no images matching your search query. Please try again."
-        )
-      );
-    }
-    const data = await Promise.allSettled(response.data.hits);
-    const result = data
-      .filter(({ status }) => status === 'fulfilled')
-      .map(({ value }) => value);
-
-    console.log(result);
-    return result;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-function createMarkup(arr) {
-  return arr
-    .map(
-      ({
-        webformatURL,
-        largeImageURL,
-        tags,
-        likes,
-        views,
-        comments,
-        downloads,
-      }) => `
-        <div class="photo-card">
-          <img src="${webformatURL}" alt="${tags}" loading="lazy" />
-          <div class="info">
-            <p class="info-item">
-              <b>Likes:</b> ${likes}
-            </p>
-            <p class="info-item">
-              <b>Views:</b> ${views}
-            </p>
-            <p class="info-item">
-              <b>Comments:</b> ${comments}
-            </p>
-            <p class="info-item">
-              <b>Downloads:</b> ${downloads}
-            </p>
-          </div>
-        </div>
-      `
-    )
-    .join('');
 }
