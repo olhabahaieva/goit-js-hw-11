@@ -22,7 +22,7 @@ async function getImages(images, page = 1) {
           )
         );
       }
-      return response.data.hits
+      return response.data
     } catch (error) {
       console.log(error);
     }

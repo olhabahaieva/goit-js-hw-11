@@ -22,18 +22,19 @@ const loadMoreButton = document.querySelector('.load-more');
 loadMoreButton.addEventListener('click', onPagination);
 
 //Function for the button
-function onPagination() {
+async function onPagination() {
   currentPage += 1;
- 
-  getImages(searchQuery, currentPage)
-    .then((data) => {
-      gallery.insertAdjacentHTML('beforeend', createMarkup(data));
-      if(gallery.children.length >= totalHits){
-        Notiflix.Notify.info("We're sorry, but you've reached the end of search results")
-        loadMoreButton.hidden = true;
-      };
-    })
-    .catch((err) => console.log(err));
+
+  try {
+    const {hits, totalHits} = await getImages(searchQuery, currentPage);
+    gallery.insertAdjacentHTML('beforeend', createMarkup(hits));
+    if(gallery.children.length >= totalHits){
+      Notiflix.Notify.info("We're sorry, but you've reached the end of search results")
+      loadMoreButton.hidden = true;
+    };
+  } catch (error) {
+    console.log(err)
+  }
 }
 
 //Main function
@@ -46,9 +47,9 @@ function formOnSubmit(evt) {
     return;
   }
   getImages(searchQuery)
-    .then((data) => {
-      gallery.innerHTML = createMarkup(data);
-      totalHits = data.totalHits;
+    .then(({hits, totalHits}) => {
+      gallery.innerHTML = createMarkup(hits);
+      
       if (totalHits <= 0) {
         Notiflix.Notify.info('No results found.');
         loadMoreButton.hidden = true;
